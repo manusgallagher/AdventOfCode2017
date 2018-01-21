@@ -17,17 +17,33 @@ import scala.io.Source
 
 object Day2 extends App {
 
-  private def getCheckSum : Int = {
-    val filename = "C:\\working\\dev\\src\\input2.txt"
-    var totalDiff = 0
-    for (line <- Source.fromFile(filename).getLines) {
-      val sortedArray: Array[Int] = line.split(" ").map(_.toInt).sortWith(_ < _)
-      val diff: Int = sortedArray.last - sortedArray.head
-      totalDiff += diff
-    }
-    totalDiff
+  private def getEvenDivide(line: Array[Int]) = {
+
+      val solutions =
+        for (a <- line; b <- line; if a > b && a % b == 0)
+          yield a / b
+
+    solutions.head
+
   }
 
+  private def getCheckSum(line: Array[Int]): Int = {
 
-  println(getCheckSum)
+    val sortedArray: Array[Int] = line.sortWith(_ < _)
+    sortedArray.last - sortedArray.head
+
+  }
+
+  private def answer(f: Array[Int] => Int): Int = {
+    var total = 0
+    val filename = "C:\\working\\dev\\src\\input2.txt"
+    for (line <- Source.fromFile(filename).getLines) {
+      total += f(line.split("\t").map(_.toInt))
+    }
+
+    total
+  }
+
+  println(answer(getCheckSum))
+  println(answer(getEvenDivide))
 }
